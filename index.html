@@ -8,18 +8,23 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
+            /* Тёмная цветовая палитра */
             --primary: #2A5CFF;
             --primary-dark: #1A4CDE;
             --secondary: #4BC2F4;
             --accent: #FF6B6B;
             --success: #4CAF50;
             --warning: #FF9800;
-            --background: #f8f9fa;
-            --surface: #ffffff;
-            --text: #333333;
-            --text-light: #666666;
-            --border: #e0e0e0;
-            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            
+            /* Основные цвета для тёмной темы */
+            --background: #0f0f23;
+            --surface: #1a1a2e;
+            --surface-light: #252545;
+            --text: #ffffff;
+            --text-light: #a0a0c0;
+            --border: #2d2d5a;
+            
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             --radius: 16px;
         }
 
@@ -34,109 +39,116 @@
             background: var(--background);
             color: var(--text);
             line-height: 1.6;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 400px;
+            max-width: 100%;
             margin: 0 auto;
-            padding: 20px;
-            padding-bottom: 80px; /* Для нижнего меню */
+            padding: 15px;
+            padding-bottom: 80px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
-            padding: 20px 0;
+            margin-bottom: 25px;
+            padding: 15px 0;
         }
 
         .logo {
-            font-size: 2.5rem;
+            font-size: 1.8rem; /* Уменьшили размер логотипа */
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
+            line-height: 1.2;
+            padding: 0 10px;
         }
 
         .tagline {
             color: var(--text-light);
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
 
         .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin: 20px 0;
+            gap: 8px;
+            margin: 15px 0;
         }
 
         .stat-card {
             background: var(--surface);
             border-radius: var(--radius);
-            padding: 15px;
+            padding: 12px;
             text-align: center;
             box-shadow: var(--shadow);
+            border: 1px solid var(--border);
         }
 
         .stat-value {
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             font-weight: bold;
             color: var(--primary);
             display: block;
         }
 
         .stat-label {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
             color: var(--text-light);
         }
 
         .card {
             background: var(--surface);
             border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 20px;
+            padding: 18px;
+            margin-bottom: 15px;
             box-shadow: var(--shadow);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border);
         }
 
         .card:hover {
             transform: translateY(-2px);
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            border-color: var(--primary);
         }
 
         .card-title {
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
-            margin-bottom: 15px;
-            color: var(--primary);
+            margin-bottom: 12px;
+            color: var(--text);
             display: flex;
             align-items: center;
         }
 
         .card-title i {
             margin-right: 10px;
+            color: var(--primary);
         }
 
         .btn {
             display: block;
             width: 100%;
-            padding: 15px 20px;
+            padding: 14px 20px;
             background: linear-gradient(135deg, var(--primary), var(--primary-dark));
             color: white;
             border: none;
             border-radius: var(--radius);
-            font-size: 1rem;
+            font-size: 0.95rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
             text-align: center;
             text-decoration: none;
-            margin-top: 10px;
+            margin-top: 8px;
         }
 
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(42, 92, 255, 0.3);
+            box-shadow: 0 6px 15px rgba(42, 92, 255, 0.4);
         }
 
         .btn-secondary {
@@ -158,40 +170,48 @@
             background: var(--surface);
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            padding: 8px 0;
+            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.3);
             border-top: 1px solid var(--border);
+            z-index: 1000;
         }
 
         .nav-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 10px 15px;
+            padding: 8px 12px;
             cursor: pointer;
             border-radius: 10px;
             transition: all 0.3s ease;
             color: var(--text-light);
             text-decoration: none;
+            min-width: 60px;
         }
 
         .nav-item.active {
             color: var(--primary);
-            background: rgba(42, 92, 255, 0.1);
+            background: var(--surface-light);
+            transform: translateY(-5px);
         }
 
         .nav-item i {
-            font-size: 1.2rem;
-            margin-bottom: 5px;
+            font-size: 1.1rem;
+            margin-bottom: 4px;
+            transition: transform 0.3s ease;
+        }
+
+        .nav-item.active i {
+            transform: scale(1.1);
         }
 
         .nav-item span {
-            font-size: 0.8rem;
+            font-size: 0.75rem;
         }
 
         .section {
             display: none;
-            animation: fadeInUp 0.5s ease;
+            animation: fadeInUp 0.4s ease;
         }
 
         .section.active {
@@ -201,7 +221,7 @@
         @keyframes fadeInUp {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(15px);
             }
             to {
                 opacity: 1;
@@ -214,7 +234,7 @@
         }
 
         .feature-list li {
-            padding: 10px 0;
+            padding: 8px 0;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -225,9 +245,9 @@
         }
 
         .feature-list li i {
-            color: var(--primary);
+            color: var(--success);
             margin-right: 10px;
-            width: 20px;
+            width: 18px;
         }
 
         .project-card {
@@ -235,10 +255,10 @@
         }
 
         .progress-bar {
-            height: 6px;
-            background: var(--border);
+            height: 5px;
+            background: var(--surface-light);
             border-radius: 3px;
-            margin: 10px 0;
+            margin: 8px 0;
             overflow: hidden;
         }
 
@@ -252,15 +272,17 @@
         .toast {
             position: fixed;
             top: 20px;
-            right: 20px;
+            right: 15px;
+            left: 15px;
             background: var(--surface);
-            padding: 15px 20px;
+            padding: 12px 16px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
             display: flex;
             align-items: center;
             animation: slideInRight 0.3s ease;
-            z-index: 1000;
+            z-index: 1001;
+            border: 1px solid var(--border);
         }
 
         .toast i {
@@ -277,6 +299,45 @@
                 transform: translateX(0);
                 opacity: 1;
             }
+        }
+
+        /* Адаптивность для очень маленьких экранов */
+        @media (max-width: 360px) {
+            .logo {
+                font-size: 1.6rem;
+            }
+            
+            .container {
+                padding: 12px;
+                padding-bottom: 70px;
+            }
+            
+            .card {
+                padding: 15px;
+            }
+            
+            .nav-item {
+                padding: 6px 8px;
+            }
+            
+            .nav-item span {
+                font-size: 0.7rem;
+            }
+        }
+
+        /* Градиентный фон для большего визуального интереса */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(42, 92, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(75, 194, 244, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 40% 40%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
+            z-index: -1;
         }
     </style>
 </head>
@@ -335,7 +396,7 @@
             </div>
 
             <div class="card project-card">
-                <div style="font-weight: 600; margin-bottom: 5px;">Образовательный курс по программированию</div>
+                <div style="font-weight: 600; margin-bottom: 5px; color: var(--text);">Образовательный курс по программированию</div>
                 <div style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 10px;">Запрошено: 500 TON · Голосов: 42</div>
                 <div class="progress-bar">
                     <div class="progress" style="width: 65%;"></div>
@@ -344,7 +405,7 @@
             </div>
 
             <div class="card project-card">
-                <div style="font-weight: 600; margin-bottom: 5px;">Запуск мини-кофейни</div>
+                <div style="font-weight: 600; margin-bottom: 5px; color: var(--text);">Запуск мини-кофейни</div>
                 <div style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 10px;">Запрошено: 1200 TON · Голосов: 28</div>
                 <div class="progress-bar">
                     <div class="progress" style="width: 40%;"></div>
@@ -388,7 +449,7 @@
 
             <div class="card">
                 <div class="card-title"><i class="fas fa-cogs"></i> Как это работает</div>
-                <ol style="padding-left: 20px;">
+                <ol style="padding-left: 20px; color: var(--text-light);">
                     <li style="margin-bottom: 10px;">Участники подают заявки с описанием целей</li>
                     <li style="margin-bottom: 10px;">Сообщество голосует в течение 3 дней</li>
                     <li style="margin-bottom: 10px;">Смарт-контракт автоматически распределяет средства</li>
@@ -454,8 +515,11 @@
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
             toast.className = 'toast';
+            const icon = type === 'info' ? 'info-circle' : type === 'warning' ? 'exclamation-triangle' : 'check-circle';
+            const iconColor = type === 'info' ? 'var(--primary)' : type === 'warning' ? 'var(--warning)' : 'var(--success)';
+            
             toast.innerHTML = `
-                <i class="fas fa-${type === 'info' ? 'info-circle' : type === 'warning' ? 'exclamation-triangle' : 'check-circle'}"></i>
+                <i class="fas fa-${icon}" style="color: ${iconColor}"></i>
                 <span>${message}</span>
             `;
             document.body.appendChild(toast);
@@ -469,7 +533,8 @@
         // Обработчик для кнопок навигации
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function() {
-                showSection(this.getAttribute('onclick').match(/'(.*?)'/)[1]);
+                const sectionId = this.getAttribute('onclick').match(/'(.*?)'/)[1];
+                showSection(sectionId);
             });
         });
     </script>
