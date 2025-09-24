@@ -344,6 +344,104 @@
             gap: 10px;
             margin-top: 10px;
         }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .profile-stat {
+            background: var(--surface-light);
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .profile-stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+            display: block;
+        }
+
+        .profile-stat-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .activity-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .activity-item:last-child {
+            border-bottom: none;
+        }
+
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--surface-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 1rem;
+        }
+
+        .activity-content {
+            flex: 1;
+        }
+
+        .activity-title {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .activity-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+
+        .activity-amount {
+            font-weight: 600;
+            color: var(--success);
+        }
+
+        .tab-nav {
+            display: flex;
+            background: var(--surface-light);
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 15px;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -433,7 +531,7 @@
                     <button class="btn btn-secondary" onclick="showSection('projects')">
                         <i class="fas fa-vote-yea"></i> Голосовать
                     </button>
-                    <button class="btn btn-secondary" onclick="showToast('История транзакций будет доступна после подключения API', 'info')">
+                    <button class="btn btn-secondary" onclick="showSection('profile')">
                         <i class="fas fa-history"></i> История
                     </button>
                 </div>
@@ -472,19 +570,163 @@
 
         <!-- Страница профиля -->
         <div id="profile" class="section">
+            <!-- Информация о профиле -->
             <div class="card">
                 <div class="card-title"><i class="fas fa-user"></i> Мой профиль</div>
-                <p>Здесь будет информация о вашей активности, балансе и участии в проектах.</p>
+                <div id="profile-not-connected">
+                    <p>Подключите кошелек, чтобы увидеть статистику вашего профиля</p>
+                    <button class="btn" onclick="connectWallet()">
+                        <i class="fas fa-plug"></i> Подключить кошелек
+                    </button>
+                </div>
+                <div id="profile-connected" style="display: none;">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 1.5rem;">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div>
+                            <div style="font-weight: 600;">Участник VmesteSmojem</div>
+                            <div style="font-size: 0.8rem; color: var(--text-light);" id="profile-wallet-address"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="profile-stats">
+                        <div class="profile-stat">
+                            <span class="profile-stat-value" id="profile-balance">0</span>
+                            <span class="profile-stat-label">Баланс TON</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="profile-stat-value" id="profile-votes">0</span>
+                            <span class="profile-stat-label">Мои голоса</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="profile-stat-value" id="profile-projects">0</span>
+                            <span class="profile-stat-label">Мои проекты</span>
+                        </div>
+                        <div class="profile-stat">
+                            <span class="profile-stat-value" id="profile-donated">0</span>
+                            <span class="profile-stat-label">Пожертвовано</span>
+                        </div>
+                    </div>
+                </div>
             </div>
 
+            <!-- Навигация по вкладкам -->
             <div class="card">
-                <div class="card-title"><i class="fas fa-history"></i> История участия</div>
-                <p>Следите за вашими заявками и голосами.</p>
+                <div class="tab-nav">
+                    <div class="tab active" onclick="showTab('activity')">Активность</div>
+                    <div class="tab" onclick="showTab('projects')">Мои проекты</div>
+                    <div class="tab" onclick="showTab('settings')">Настройки</div>
+                </div>
+
+                <!-- Вкладка Активность -->
+                <div id="tab-activity" class="tab-content active">
+                    <div class="activity-item">
+                        <div class="activity-icon" style="color: var(--primary);">
+                            <i class="fas fa-wallet"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Кошелек подключен</div>
+                            <div class="activity-date">Только что</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon" style="color: var(--success);">
+                            <i class="fas fa-vote-yea"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Проголосовали за проект "Образовательный курс"</div>
+                            <div class="activity-date">2 часа назад</div>
+                        </div>
+                        <div class="activity-amount">-5 TON</div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon" style="color: var(--accent);">
+                            <i class="fas fa-plus"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Создали проект "Запуск мини-кофейни"</div>
+                            <div class="activity-date">Вчера</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon" style="color: var(--secondary);">
+                            <i class="fas fa-download"></i>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">Пополнение баланса</div>
+                            <div class="activity-date">3 дня назад</div>
+                        </div>
+                        <div class="activity-amount">+100 TON</div>
+                    </div>
+                </div>
+
+                <!-- Вкладка Мои проекты -->
+                <div id="tab-projects" class="tab-content">
+                    <div style="text-align: center; padding: 20px; color: var(--text-light);">
+                        <i class="fas fa-folder-open" style="font-size: 2rem; margin-bottom: 10px; opacity: 0.5;"></i>
+                        <p>У вас пока нет активных проектов</p>
+                        <button class="btn" onclick="showSection('projects')" style="margin-top: 15px;">
+                            <i class="fas fa-plus"></i> Создать первый проект
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Вкладка Настройки -->
+                <div id="tab-settings" class="tab-content">
+                    <div style="margin-bottom: 15px;">
+                        <div style="font-weight: 600; margin-bottom: 10px;">Уведомления</div>
+                        <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                            <input type="checkbox" checked style="margin-right: 10px;">
+                            Уведомления о новых проектах
+                        </label>
+                        <label style="display: flex; align-items: center; margin-bottom: 10px; cursor: pointer;">
+                            <input type="checkbox" checked style="margin-right: 10px;">
+                            Уведомления о результатах голосования
+                        </label>
+                        <label style="display: flex; align-items: center; cursor: pointer;">
+                            <input type="checkbox" style="margin-right: 10px;">
+                            Еженедельная статистика
+                        </label>
+                    </div>
+                    
+                    <button class="btn btn-secondary" onclick="showToast('Настройки сохранены', 'success')">
+                        <i class="fas fa-save"></i> Сохранить настройки
+                    </button>
+                    
+                    <button class="btn" onclick="disconnectWallet()" style="margin-top: 10px; background: var(--accent);">
+                        <i class="fas fa-power-off"></i> Выйти из аккаунта
+                    </button>
+                </div>
             </div>
 
-            <button class="btn" onclick="showToast('Раздел в разработке', 'warning')">
-                <i class="fas fa-wallet"></i> Подключить TON кошелек
-            </button>
+            <!-- Достижения -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-trophy"></i> Мои достижения</div>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; text-align: center;">
+                    <div style="padding: 10px;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--surface-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; color: var(--success);">
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <div style="font-size: 0.8rem;">Новичок</div>
+                    </div>
+                    <div style="padding: 10px; opacity: 0.3;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--surface-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 5px;">
+                            <i class="fas fa-hand-holding-heart"></i>
+                        </div>
+                        <div style="font-size: 0.8rem;">Активный участник</div>
+                    </div>
+                    <div style="padding: 10px; opacity: 0.3;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--surface-light); display: flex; align-items: center; justify-content: center; margin: 0 auto 5px;">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div style="font-size: 0.8rem;">Лидер сообщества</div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Страница правил -->
@@ -537,7 +779,7 @@
         tg.expand();
         tg.enableClosingConfirmation();
 
-        // Данные приложения (в будущем заменим на API)
+        // Данные приложения
         let appData = {
             members: 154,
             projects: 7,
@@ -550,7 +792,13 @@
                 timeLeft: '2 дня 15 часов'
             },
             walletConnected: false,
-            walletAddress: ''
+            walletAddress: '',
+            userProfile: {
+                balance: 95,
+                votes: 3,
+                userProjects: 1,
+                donated: 15
+            }
         };
 
         // Инициализация приложения
@@ -558,6 +806,7 @@
             updateStatistics();
             updateRoundInfo();
             checkWalletConnection();
+            updateProfile();
         }
 
         // Обновление статистики
@@ -585,6 +834,7 @@
                 appData.walletConnected = true;
                 appData.walletAddress = 'EQAhkf6...z35Xabc';
                 updateWalletDisplay();
+                updateProfile();
                 showToast('Кошелек успешно подключен!', 'success');
                 
                 // Увеличим счетчик участников при первом подключении
@@ -600,6 +850,7 @@
             appData.walletConnected = false;
             appData.walletAddress = '';
             updateWalletDisplay();
+            updateProfile();
             showToast('Кошелек отключен', 'info');
         }
 
@@ -619,9 +870,32 @@
             }
         }
 
+        // Обновление профиля
+        function updateProfile() {
+            const profileConnected = document.getElementById('profile-connected');
+            const profileNotConnected = document.getElementById('profile-not-connected');
+            const profileWalletAddress = document.getElementById('profile-wallet-address');
+            
+            if (appData.walletConnected) {
+                profileConnected.style.display = 'block';
+                profileNotConnected.style.display = 'none';
+                profileWalletAddress.textContent = appData.walletAddress;
+                
+                // Обновляем статистику профиля
+                document.getElementById('profile-balance').textContent = appData.userProfile.balance;
+                document.getElementById('profile-votes').textContent = appData.userProfile.votes;
+                document.getElementById('profile-projects').textContent = appData.userProfile.userProjects;
+                document.getElementById('profile-donated').textContent = appData.userProfile.donated;
+            } else {
+                profileConnected.style.display = 'none';
+                profileNotConnected.style.display = 'block';
+            }
+        }
+
         // Проверка состояния кошелька при загрузке
         function checkWalletConnection() {
             updateWalletDisplay();
+            updateProfile();
         }
 
         // Функция для показа разделов
@@ -635,6 +909,25 @@
             });
             
             document.getElementById(sectionId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Функция для переключения вкладок в профиле
+        function showTab(tabId) {
+            // Скрываем все вкладки
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Убираем активный класс у всех вкладок
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            
+            // Показываем выбранную вкладку
+            document.getElementById('tab-' + tabId).classList.add('active');
+            
+            // Активируем соответствующую кнопку вкладки
             event.currentTarget.classList.add('active');
         }
 
