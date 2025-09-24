@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VmesteSmojem - Сообщество взаимопомощи</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2A5CFF 0%, #4BC2F4 100%);
+            color: white;
+            padding: 30px 20px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .nav {
+            display: flex;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .nav-item {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+        .nav-item.active {
+            border-bottom: 3px solid #2A5CFF;
+            color: #2A5CFF;
+            background: white;
+        }
+
+        .content {
+            padding: 25px;
+            min-height: 300px;
+        }
+
+        .section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-left: 4px solid #2A5CFF;
+        }
+
+        .card h3 {
+            color: #2A5CFF;
+            margin-bottom: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #2A5CFF 0%, #4BC2F4 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: transform 0.3s ease;
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 20px 0;
+        }
+
+        .stat-item {
+            background: #e3f2fd;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2A5CFF;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .feature-list {
+            list-style: none;
+            margin: 20px 0;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li:before {
+            content: "✓";
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">VmesteSmojem</div>
+            <div class="subtitle">Сообщество взаимопомощи на TON</div>
+        </div>
+
+        <div class="nav">
+            <div class="nav-item active" onclick="showSection('main')">Главная</div>
+            <div class="nav-item" onclick="showSection('projects')">Проекты</div>
+            <div class="nav-item" onclick="showSection('rules')">Правила</div>
+        </div>
+
+        <div class="content">
+            <!-- Главная страница -->
+            <div id="main" class="section active">
+                <div class="card">
+                    <h3>👋 Добро пожаловать!</h3>
+                    <p>VmesteSmojem - это сообщество, где мы вместе решаем, кому помочь. Каждую неделю мы выбираем и финансируем лучшие проекты.</p>
+                </div>
+
+                <div class="stats">
+                    <div class="stat-item">
+                        <div class="stat-value">154</div>
+                        <div class="stat-label">Участников</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-value">7</div>
+                        <div class="stat-label">Проектов</div>
+                    </div>
+                </div>
+
+                <button class="btn" onclick="showSection('projects')">
+                    📋 Подать заявку на финансирование
+                </button>
+            </div>
+
+            <!-- Страница проектов -->
+            <div id="projects" class="section">
+                <div class="card">
+                    <h3>🚀 Новые проекты</h3>
+                    <p>Сейчас идет сбор заявок на следующий раунд финансирования. Вы можете подать свою заявку до пятницы.</p>
+                </div>
+
+                <div class="card">
+                    <h3>📝 Подать заявку</h3>
+                    <p>Опишите ваш проект, укажите сумму и приложите необходимые документы.</p>
+                    <button class="btn" onclick="alert('Функция будет доступна после подключения бэкенда')">
+                        📤 Подать заявку
+                    </button>
+                </div>
+            </div>
+
+            <!-- Страница правил -->
+            <div id="rules" class="section">
+                <div class="card">
+                    <h3>📋 Основные правила</h3>
+                    <ul class="feature-list">
+                        <li>Только реальные и проверяемые цели</li>
+                        <li>Прозрачность всех операций через TON</li>
+                        <li>Сообщество решает голосованием</li>
+                        <li>Уважение к каждому участнику</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>⚡ Как это работает</h3>
+                    <ol style="padding-left: 20px; margin: 15px 0;">
+                        <li style="margin-bottom: 10px;">Участники подают заявки</li>
+                        <li style="margin-bottom: 10px;">Сообщество голосует 3 дня</li>
+                        <li style="margin-bottom: 10px;">Смарт-контракт автоматически переводит средства</li>
+                        <li>Победитель отчитывается о результатах</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram Web App
+        let tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.enableClosingConfirmation();
+
+        // Показываем основную кнопку
+        tg.MainButton.setText('Присоединиться к сообществу');
+        tg.MainButton.show();
+        tg.MainButton.onClick(() => {
+            tg.showAlert('Для участия перейдите в @vmestesmojem_bot и нажмите START');
+        });
+
+        function showSection(sectionId) {
+            // Скрываем все разделы
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Убираем активный класс у всех кнопок навигации
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Показываем выбранный раздел
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Активируем соответствующую кнопку навигации
+            event.target.classList.add('active');
+        }
+
+        // Добавляем обработчик для кнопок навигации
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', function() {
+                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>
