@@ -8,22 +8,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         :root {
-            /* Тёмная цветовая палитра */
             --primary: #2A5CFF;
             --primary-dark: #1A4CDE;
             --secondary: #4BC2F4;
             --accent: #FF6B6B;
             --success: #4CAF50;
             --warning: #FF9800;
-            
-            /* Основные цвета для тёмной темы */
             --background: #0f0f23;
             --surface: #1a1a2e;
             --surface-light: #252545;
             --text: #ffffff;
             --text-light: #a0a0c0;
             --border: #2d2d5a;
-            
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             --radius: 16px;
         }
@@ -56,7 +52,7 @@
         }
 
         .logo {
-            font-size: 1.8rem; /* Уменьшили размер логотипа */
+            font-size: 1.8rem;
             font-weight: 700;
             background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
@@ -301,7 +297,6 @@
             }
         }
 
-        /* Адаптивность для очень маленьких экранов */
         @media (max-width: 360px) {
             .logo {
                 font-size: 1.6rem;
@@ -325,7 +320,6 @@
             }
         }
 
-        /* Градиентный фон для большего визуального интереса */
         body::before {
             content: '';
             position: fixed;
@@ -338,6 +332,17 @@
                 radial-gradient(circle at 80% 20%, rgba(75, 194, 244, 0.1) 0%, transparent 50%),
                 radial-gradient(circle at 40% 40%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
             z-index: -1;
+        }
+
+        .wallet-section {
+            margin-bottom: 15px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -355,22 +360,49 @@
                 <p>VmesteSmojem - это сообщество, где мы вместе решаем, кому помочь. Каждую неделю мы выбираем и финансируем лучшие проекты через прозрачное голосование в блокчейне TON.</p>
             </div>
 
+            <!-- Динамическая статистика -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <span class="stat-value">154</span>
+                    <span class="stat-value" id="members-count">154</span>
                     <span class="stat-label">Участников</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">7</span>
+                    <span class="stat-value" id="projects-count">7</span>
                     <span class="stat-label">Проектов</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">5,420</span>
+                    <span class="stat-value" id="ton-raised">5,420</span>
                     <span class="stat-label">TON собрано</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">3</span>
+                    <span class="stat-value" id="winners-count">3</span>
                     <span class="stat-label">Победителя</span>
+                </div>
+            </div>
+
+            <!-- Кнопка подключения кошелька -->
+            <div class="card wallet-section">
+                <div class="card-title"><i class="fas fa-wallet"></i> Мой кошелек</div>
+                <div id="wallet-not-connected">
+                    <p>Подключите TON кошелек для участия в голосованиях</p>
+                    <button class="btn" onclick="connectWallet()">
+                        <i class="fas fa-plug"></i> Подключить кошелек
+                    </button>
+                </div>
+                <div id="wallet-connected" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <span>Кошелек подключен</span>
+                        <span style="color: var(--success); font-size: 0.8rem;">
+                            <i class="fas fa-check-circle"></i> Online
+                        </span>
+                    </div>
+                    <div style="background: var(--surface-light); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                        <div style="font-size: 0.8rem; color: var(--text-light);">Адрес</div>
+                        <div id="wallet-address" style="font-family: monospace; font-size: 0.7rem; word-break: break-all;"></div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="disconnectWallet()">
+                        <i class="fas fa-power-off"></i> Отключить
+                    </button>
                 </div>
             </div>
 
@@ -378,13 +410,33 @@
                 <i class="fas fa-plus"></i> Подать заявку на финансирование
             </button>
 
+            <!-- Текущий раунд с прогрессом -->
             <div class="card">
                 <div class="card-title"><i class="fas fa-rocket"></i> Текущий раунд</div>
-                <p>Сбор заявок открыт до пятницы. Успейте предложить свой проект!</p>
+                <p>Сбор заявок открыт до <strong id="round-deadline">пятницы</strong>. Успейте предложить свой проект!</p>
                 <div class="progress-bar">
-                    <div class="progress" style="width: 65%;"></div>
+                    <div class="progress" id="round-progress" style="width: 65%;"></div>
                 </div>
-                <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">Осталось 2 дня 15 часов</div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">
+                    <span>Собрано: <span id="current-round-raised">3,520</span> TON</span>
+                    <span>Цель: <span id="round-goal">5,000</span> TON</span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">
+                    Осталось: <span id="round-time-left">2 дня 15 часов</span>
+                </div>
+            </div>
+
+            <!-- Быстрые действия -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-bolt"></i> Быстрые действия</div>
+                <div class="quick-actions">
+                    <button class="btn btn-secondary" onclick="showSection('projects')">
+                        <i class="fas fa-vote-yea"></i> Голосовать
+                    </button>
+                    <button class="btn btn-secondary" onclick="showToast('История транзакций будет доступна после подключения API', 'info')">
+                        <i class="fas fa-history"></i> История
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -485,29 +537,104 @@
         tg.expand();
         tg.enableClosingConfirmation();
 
-        // Показываем основную кнопку
-        tg.MainButton.setText('Присоединиться к сообществу');
-        tg.MainButton.show();
-        tg.MainButton.onClick(() => {
-            tg.showAlert('Для участия перейдите в @vmestesmojem_bot и нажмите START');
-        });
+        // Данные приложения (в будущем заменим на API)
+        let appData = {
+            members: 154,
+            projects: 7,
+            tonRaised: 5420,
+            winners: 3,
+            currentRound: {
+                raised: 3520,
+                goal: 5000,
+                deadline: '2025-10-01',
+                timeLeft: '2 дня 15 часов'
+            },
+            walletConnected: false,
+            walletAddress: ''
+        };
+
+        // Инициализация приложения
+        function initApp() {
+            updateStatistics();
+            updateRoundInfo();
+            checkWalletConnection();
+        }
+
+        // Обновление статистики
+        function updateStatistics() {
+            document.getElementById('members-count').textContent = appData.members.toLocaleString();
+            document.getElementById('projects-count').textContent = appData.projects;
+            document.getElementById('ton-raised').textContent = appData.tonRaised.toLocaleString();
+            document.getElementById('winners-count').textContent = appData.winners;
+        }
+
+        // Обновление информации о раунде
+        function updateRoundInfo() {
+            const progress = (appData.currentRound.raised / appData.currentRound.goal) * 100;
+            document.getElementById('round-progress').style.width = `${progress}%`;
+            document.getElementById('current-round-raised').textContent = appData.currentRound.raised.toLocaleString();
+            document.getElementById('round-goal').textContent = appData.currentRound.goal.toLocaleString();
+            document.getElementById('round-time-left').textContent = appData.currentRound.timeLeft;
+        }
+
+        // Подключение кошелька (имитация)
+        function connectWallet() {
+            showToast('Подключение кошелька...', 'info');
+            
+            setTimeout(() => {
+                appData.walletConnected = true;
+                appData.walletAddress = 'EQAhkf6...z35Xabc';
+                updateWalletDisplay();
+                showToast('Кошелек успешно подключен!', 'success');
+                
+                // Увеличим счетчик участников при первом подключении
+                if (appData.members === 154) {
+                    appData.members++;
+                    updateStatistics();
+                }
+            }, 1500);
+        }
+
+        // Отключение кошелька
+        function disconnectWallet() {
+            appData.walletConnected = false;
+            appData.walletAddress = '';
+            updateWalletDisplay();
+            showToast('Кошелек отключен', 'info');
+        }
+
+        // Обновление отображения кошелька
+        function updateWalletDisplay() {
+            const connectedSection = document.getElementById('wallet-connected');
+            const notConnectedSection = document.getElementById('wallet-not-connected');
+            const walletAddress = document.getElementById('wallet-address');
+
+            if (appData.walletConnected) {
+                connectedSection.style.display = 'block';
+                notConnectedSection.style.display = 'none';
+                walletAddress.textContent = appData.walletAddress;
+            } else {
+                connectedSection.style.display = 'none';
+                notConnectedSection.style.display = 'block';
+            }
+        }
+
+        // Проверка состояния кошелька при загрузке
+        function checkWalletConnection() {
+            updateWalletDisplay();
+        }
 
         // Функция для показа разделов
         function showSection(sectionId) {
-            // Скрываем все разделы
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // Убираем активный класс у всех кнопок навигации
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // Показываем выбранный раздел
             document.getElementById(sectionId).classList.add('active');
-            
-            // Активируем соответствующую кнопку навигации
             event.currentTarget.classList.add('active');
         }
 
@@ -537,6 +664,9 @@
                 showSection(sectionId);
             });
         });
+
+        // Инициализация приложения при загрузке
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
