@@ -5,7 +5,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VmesteSmojem - Сообщество взаимопомощи</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        :root {
+            --primary: #2A5CFF;
+            --primary-dark: #1A4CDE;
+            --secondary: #4BC2F4;
+            --accent: #FF6B6B;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --background: #f8f9fa;
+            --surface: #ffffff;
+            --text: #333333;
+            --text-light: #666666;
+            --border: #e0e0e0;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            --radius: 16px;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -14,152 +31,252 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #333;
-            min-height: 100vh;
-            padding: 20px;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
         }
 
         .container {
             max-width: 400px;
             margin: 0 auto;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
+            padding: 20px;
+            padding-bottom: 80px; /* Для нижнего меню */
         }
 
         .header {
-            background: linear-gradient(135deg, #2A5CFF 0%, #4BC2F4 100%);
-            color: white;
-            padding: 30px 20px;
             text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
         }
 
         .logo {
-            font-size: 28px;
-            font-weight: bold;
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
 
-        .subtitle {
-            font-size: 14px;
-            opacity: 0.9;
+        .tagline {
+            color: var(--text-light);
+            font-size: 1rem;
         }
 
-        .nav {
-            display: flex;
-            background: #f8f9fa;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .nav-item {
-            flex: 1;
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-bottom: 3px solid transparent;
-        }
-
-        .nav-item.active {
-            border-bottom: 3px solid #2A5CFF;
-            color: #2A5CFF;
-            background: white;
-        }
-
-        .content {
-            padding: 25px;
-            min-height: 300px;
-        }
-
-        .section {
-            display: none;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        .card {
-            background: #f8f9fa;
-            border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            border-left: 4px solid #2A5CFF;
-        }
-
-        .card h3 {
-            color: #2A5CFF;
-            margin-bottom: 10px;
-        }
-
-        .btn {
-            background: linear-gradient(135deg, #2A5CFF 0%, #4BC2F4 100%);
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            transition: transform 0.3s ease;
-            width: 100%;
-            margin-top: 10px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-        }
-
-        .stats {
+        .stats-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin: 20px 0;
         }
 
-        .stat-item {
-            background: #e3f2fd;
+        .stat-card {
+            background: var(--surface);
+            border-radius: var(--radius);
             padding: 15px;
-            border-radius: 10px;
             text-align: center;
+            box-shadow: var(--shadow);
         }
 
         .stat-value {
-            font-size: 24px;
+            font-size: 1.5rem;
             font-weight: bold;
-            color: #2A5CFF;
+            color: var(--primary);
+            display: block;
         }
 
         .stat-label {
-            font-size: 12px;
-            color: #666;
+            font-size: 0.8rem;
+            color: var(--text-light);
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
-        .feature-list {
-            list-style: none;
-            margin: 20px 0;
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
         }
 
-        .feature-list li {
-            padding: 10px 0;
-            border-bottom: 1px solid #eee;
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary);
             display: flex;
             align-items: center;
         }
 
-        .feature-list li:before {
-            content: "✓";
-            color: #4CAF50;
-            font-weight: bold;
+        .card-title i {
             margin-right: 10px;
+        }
+
+        .btn {
+            display: block;
+            width: 100%;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            text-decoration: none;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(42, 92, 255, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--primary);
+            border: 2px solid var(--primary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            border-top: 1px solid var(--border);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            color: var(--text-light);
+            text-decoration: none;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(42, 92, 255, 0.1);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .nav-item span {
+            font-size: 0.8rem;
+        }
+
+        .section {
+            display: none;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+        }
+
+        .feature-list li:last-child {
+            border-bottom: none;
+        }
+
+        .feature-list li i {
+            color: var(--primary);
+            margin-right: 10px;
+            width: 20px;
+        }
+
+        .project-card {
+            border-left: 4px solid var(--accent);
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: var(--border);
+            border-radius: 3px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--surface);
+            padding: 15px 20px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            animation: slideInRight 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast i {
+            margin-right: 10px;
+            color: var(--success);
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
         }
     </style>
 </head>
@@ -167,77 +284,137 @@
     <div class="container">
         <div class="header">
             <div class="logo">VmesteSmojem</div>
-            <div class="subtitle">Сообщество взаимопомощи на TON</div>
+            <div class="tagline">Сообщество взаимопомощи на TON</div>
         </div>
 
-        <div class="nav">
-            <div class="nav-item active" onclick="showSection('main')">Главная</div>
-            <div class="nav-item" onclick="showSection('projects')">Проекты</div>
-            <div class="nav-item" onclick="showSection('rules')">Правила</div>
+        <!-- Главная страница -->
+        <div id="main" class="section active">
+            <div class="card">
+                <div class="card-title"><i class="fas fa-hand-holding-heart"></i> О проекте</div>
+                <p>VmesteSmojem - это сообщество, где мы вместе решаем, кому помочь. Каждую неделю мы выбираем и финансируем лучшие проекты через прозрачное голосование в блокчейне TON.</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-value">154</span>
+                    <span class="stat-label">Участников</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">7</span>
+                    <span class="stat-label">Проектов</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">5,420</span>
+                    <span class="stat-label">TON собрано</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-value">3</span>
+                    <span class="stat-label">Победителя</span>
+                </div>
+            </div>
+
+            <button class="btn" onclick="showSection('projects')">
+                <i class="fas fa-plus"></i> Подать заявку на финансирование
+            </button>
+
+            <div class="card">
+                <div class="card-title"><i class="fas fa-rocket"></i> Текущий раунд</div>
+                <p>Сбор заявок открыт до пятницы. Успейте предложить свой проект!</p>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 65%;"></div>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">Осталось 2 дня 15 часов</div>
+            </div>
         </div>
 
-        <div class="content">
-            <!-- Главная страница -->
-            <div id="main" class="section active">
-                <div class="card">
-                    <h3>👋 Добро пожаловать!</h3>
-                    <p>VmesteSmojem - это сообщество, где мы вместе решаем, кому помочь. Каждую неделю мы выбираем и финансируем лучшие проекты.</p>
-                </div>
-
-                <div class="stats">
-                    <div class="stat-item">
-                        <div class="stat-value">154</div>
-                        <div class="stat-label">Участников</div>
-                    </div>
-                    <div class="stat-item">
-                        <div class="stat-value">7</div>
-                        <div class="stat-label">Проектов</div>
-                    </div>
-                </div>
-
-                <button class="btn" onclick="showSection('projects')">
-                    📋 Подать заявку на финансирование
-                </button>
+        <!-- Страница проектов -->
+        <div id="projects" class="section">
+            <div class="card">
+                <div class="card-title"><i class="fas fa-project-diagram"></i> Активные проекты</div>
+                <p>Голосуйте за проекты, которые вам нравятся. Победитель получит финансирование в конце раунда.</p>
             </div>
 
-            <!-- Страница проектов -->
-            <div id="projects" class="section">
-                <div class="card">
-                    <h3>🚀 Новые проекты</h3>
-                    <p>Сейчас идет сбор заявок на следующий раунд финансирования. Вы можете подать свою заявку до пятницы.</p>
+            <div class="card project-card">
+                <div style="font-weight: 600; margin-bottom: 5px;">Образовательный курс по программированию</div>
+                <div style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 10px;">Запрошено: 500 TON · Голосов: 42</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 65%;"></div>
                 </div>
-
-                <div class="card">
-                    <h3>📝 Подать заявку</h3>
-                    <p>Опишите ваш проект, укажите сумму и приложите необходимые документы.</p>
-                    <button class="btn" onclick="alert('Функция будет доступна после подключения бэкенда')">
-                        📤 Подать заявку
-                    </button>
-                </div>
+                <button class="btn btn-secondary" style="margin-top: 10px;"><i class="fas fa-vote-yea"></i> Поддержать</button>
             </div>
 
-            <!-- Страница правил -->
-            <div id="rules" class="section">
-                <div class="card">
-                    <h3>📋 Основные правила</h3>
-                    <ul class="feature-list">
-                        <li>Только реальные и проверяемые цели</li>
-                        <li>Прозрачность всех операций через TON</li>
-                        <li>Сообщество решает голосованием</li>
-                        <li>Уважение к каждому участнику</li>
-                    </ul>
+            <div class="card project-card">
+                <div style="font-weight: 600; margin-bottom: 5px;">Запуск мини-кофейни</div>
+                <div style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 10px;">Запрошено: 1200 TON · Голосов: 28</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 40%;"></div>
                 </div>
-
-                <div class="card">
-                    <h3>⚡ Как это работает</h3>
-                    <ol style="padding-left: 20px; margin: 15px 0;">
-                        <li style="margin-bottom: 10px;">Участники подают заявки</li>
-                        <li style="margin-bottom: 10px;">Сообщество голосует 3 дня</li>
-                        <li style="margin-bottom: 10px;">Смарт-контракт автоматически переводит средства</li>
-                        <li>Победитель отчитывается о результатах</li>
-                    </ol>
-                </div>
+                <button class="btn btn-secondary" style="margin-top: 10px;"><i class="fas fa-vote-yea"></i> Поддержать</button>
             </div>
+
+            <button class="btn" onclick="showToast('Функция будет доступна после подключения бэкенда', 'info')">
+                <i class="fas fa-plus"></i> Подать новый проект
+            </button>
+        </div>
+
+        <!-- Страница профиля -->
+        <div id="profile" class="section">
+            <div class="card">
+                <div class="card-title"><i class="fas fa-user"></i> Мой профиль</div>
+                <p>Здесь будет информация о вашей активности, балансе и участии в проектах.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><i class="fas fa-history"></i> История участия</div>
+                <p>Следите за вашими заявками и голосами.</p>
+            </div>
+
+            <button class="btn" onclick="showToast('Раздел в разработке', 'warning')">
+                <i class="fas fa-wallet"></i> Подключить TON кошелек
+            </button>
+        </div>
+
+        <!-- Страница правил -->
+        <div id="rules" class="section">
+            <div class="card">
+                <div class="card-title"><i class="fas fa-book"></i> Правила сообщества</div>
+                <ul class="feature-list">
+                    <li><i class="fas fa-check"></i> Только реальные и проверяемые цели</li>
+                    <li><i class="fas fa-check"></i> Прозрачность всех операций через TON</li>
+                    <li><i class="fas fa-check"></i> Сообщество решает голосованием</li>
+                    <li><i class="fas fa-check"></i> Уважение к каждому участнику</li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-title"><i class="fas fa-cogs"></i> Как это работает</div>
+                <ol style="padding-left: 20px;">
+                    <li style="margin-bottom: 10px;">Участники подают заявки с описанием целей</li>
+                    <li style="margin-bottom: 10px;">Сообщество голосует в течение 3 дней</li>
+                    <li style="margin-bottom: 10px;">Смарт-контракт автоматически распределяет средства</li>
+                    <li>Победитель получает финансирование</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <!-- Нижнее меню -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="showSection('main')">
+            <i class="fas fa-home"></i>
+            <span>Главная</span>
+        </div>
+        <div class="nav-item" onclick="showSection('projects')">
+            <i class="fas fa-project-diagram"></i>
+            <span>Проекты</span>
+        </div>
+        <div class="nav-item" onclick="showSection('profile')">
+            <i class="fas fa-user"></i>
+            <span>Профиль</span>
+        </div>
+        <div class="nav-item" onclick="showSection('rules')">
+            <i class="fas fa-info-circle"></i>
+            <span>Правила</span>
         </div>
     </div>
 
@@ -254,6 +431,7 @@
             tg.showAlert('Для участия перейдите в @vmestesmojem_bot и нажмите START');
         });
 
+        // Функция для показа разделов
         function showSection(sectionId) {
             // Скрываем все разделы
             document.querySelectorAll('.section').forEach(section => {
@@ -269,14 +447,29 @@
             document.getElementById(sectionId).classList.add('active');
             
             // Активируем соответствующую кнопку навигации
-            event.target.classList.add('active');
+            event.currentTarget.classList.add('active');
         }
 
-        // Добавляем обработчик для кнопок навигации
+        // Функция для показа уведомлений
+        function showToast(message, type = 'info') {
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'info' ? 'info-circle' : type === 'warning' ? 'exclamation-triangle' : 'check-circle'}"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s ease reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Обработчик для кнопок навигации
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', function() {
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                this.classList.add('active');
+                showSection(this.getAttribute('onclick').match(/'(.*?)'/)[1]);
             });
         });
     </script>
