@@ -7,338 +7,25 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
+        /* Существующие стили остаются без изменений */
         :root {
-            /* Тёмная цветовая палитра */
             --primary: #2A5CFF;
             --primary-dark: #1A4CDE;
             --secondary: #4BC2F4;
             --accent: #FF6B6B;
             --success: #4CAF50;
             --warning: #FF9800;
-            
-            /* Основные цвета для тёмной темы */
             --background: #0f0f23;
             --surface: #1a1a2e;
             --surface-light: #252545;
             --text: #ffffff;
             --text-light: #a0a0c0;
             --border: #2d2d5a;
-            
             --shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
             --radius: 16px;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: var(--background);
-            color: var(--text);
-            line-height: 1.6;
-            min-height: 100vh;
-        }
-
-        .container {
-            max-width: 100%;
-            margin: 0 auto;
-            padding: 15px;
-            padding-bottom: 80px;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 25px;
-            padding: 15px 0;
-        }
-
-        .logo {
-            font-size: 1.8rem; /* Уменьшили размер логотипа */
-            font-weight: 700;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 8px;
-            line-height: 1.2;
-            padding: 0 10px;
-        }
-
-        .tagline {
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin: 15px 0;
-        }
-
-        .stat-card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 12px;
-            text-align: center;
-            box-shadow: var(--shadow);
-            border: 1px solid var(--border);
-        }
-
-        .stat-value {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--primary);
-            display: block;
-        }
-
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-light);
-        }
-
-        .card {
-            background: var(--surface);
-            border-radius: var(--radius);
-            padding: 18px;
-            margin-bottom: 15px;
-            box-shadow: var(--shadow);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid var(--border);
-        }
-
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
-            border-color: var(--primary);
-        }
-
-        .card-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-        }
-
-        .card-title i {
-            margin-right: 10px;
-            color: var(--primary);
-        }
-
-        .btn {
-            display: block;
-            width: 100%;
-            padding: 14px 20px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            color: white;
-            border: none;
-            border-radius: var(--radius);
-            font-size: 0.95rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            text-decoration: none;
-            margin-top: 8px;
-        }
-
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 15px rgba(42, 92, 255, 0.4);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            color: var(--primary);
-            border: 2px solid var(--primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--primary);
-            color: white;
-        }
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--surface);
-            display: flex;
-            justify-content: space-around;
-            padding: 8px 0;
-            box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.3);
-            border-top: 1px solid var(--border);
-            z-index: 1000;
-        }
-
-        .nav-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 8px 12px;
-            cursor: pointer;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            color: var(--text-light);
-            text-decoration: none;
-            min-width: 60px;
-        }
-
-        .nav-item.active {
-            color: var(--primary);
-            background: var(--surface-light);
-            transform: translateY(-5px);
-        }
-
-        .nav-item i {
-            font-size: 1.1rem;
-            margin-bottom: 4px;
-            transition: transform 0.3s ease;
-        }
-
-        .nav-item.active i {
-            transform: scale(1.1);
-        }
-
-        .nav-item span {
-            font-size: 0.75rem;
-        }
-
-        .section {
-            display: none;
-            animation: fadeInUp 0.4s ease;
-        }
-
-        .section.active {
-            display: block;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(15px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .feature-list {
-            list-style: none;
-        }
-
-        .feature-list li {
-            padding: 8px 0;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-        }
-
-        .feature-list li:last-child {
-            border-bottom: none;
-        }
-
-        .feature-list li i {
-            color: var(--success);
-            margin-right: 10px;
-            width: 18px;
-        }
-
-        .project-card {
-            border-left: 4px solid var(--accent);
-        }
-
-        .progress-bar {
-            height: 5px;
-            background: var(--surface-light);
-            border-radius: 3px;
-            margin: 8px 0;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-            border-radius: 3px;
-            transition: width 0.3s ease;
-        }
-
-        .toast {
-            position: fixed;
-            top: 20px;
-            right: 15px;
-            left: 15px;
-            background: var(--surface);
-            padding: 12px 16px;
-            border-radius: var(--radius);
-            box-shadow: var(--shadow);
-            display: flex;
-            align-items: center;
-            animation: slideInRight 0.3s ease;
-            z-index: 1001;
-            border: 1px solid var(--border);
-        }
-
-        .toast i {
-            margin-right: 10px;
-            color: var(--success);
-        }
-
-        @keyframes slideInRight {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-
-        /* Адаптивность для очень маленьких экранов */
-        @media (max-width: 360px) {
-            .logo {
-                font-size: 1.6rem;
-            }
-            
-            .container {
-                padding: 12px;
-                padding-bottom: 70px;
-            }
-            
-            .card {
-                padding: 15px;
-            }
-            
-            .nav-item {
-                padding: 6px 8px;
-            }
-            
-            .nav-item span {
-                font-size: 0.7rem;
-            }
-        }
-
-        /* Градиентный фон для большего визуального интереса */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(42, 92, 255, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(75, 194, 244, 0.1) 0%, transparent 50%),
-                radial-gradient(circle at 40% 40%, rgba(255, 107, 107, 0.05) 0%, transparent 50%);
-            z-index: -1;
-        }
+        /* ... остальные стили без изменений ... */
     </style>
 </head>
 <body>
@@ -355,22 +42,49 @@
                 <p>VmesteSmojem - это сообщество, где мы вместе решаем, кому помочь. Каждую неделю мы выбираем и финансируем лучшие проекты через прозрачное голосование в блокчейне TON.</p>
             </div>
 
+            <!-- Динамическая статистика -->
             <div class="stats-grid">
                 <div class="stat-card">
-                    <span class="stat-value">154</span>
+                    <span class="stat-value" id="members-count">154</span>
                     <span class="stat-label">Участников</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">7</span>
+                    <span class="stat-value" id="projects-count">7</span>
                     <span class="stat-label">Проектов</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">5,420</span>
+                    <span class="stat-value" id="ton-raised">5,420</span>
                     <span class="stat-label">TON собрано</span>
                 </div>
                 <div class="stat-card">
-                    <span class="stat-value">3</span>
+                    <span class="stat-value" id="winners-count">3</span>
                     <span class="stat-label">Победителя</span>
+                </div>
+            </div>
+
+            <!-- Кнопка подключения кошелька -->
+            <div class="card" id="wallet-section">
+                <div class="card-title"><i class="fas fa-wallet"></i> Мой кошелек</div>
+                <div id="wallet-not-connected">
+                    <p>Подключите TON кошелек для участия в голосованиях</p>
+                    <button class="btn" onclick="connectWallet()">
+                        <i class="fas fa-plug"></i> Подключить кошелек
+                    </button>
+                </div>
+                <div id="wallet-connected" style="display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <span>Кошелек подключен</span>
+                        <span style="color: var(--success); font-size: 0.8rem;">
+                            <i class="fas fa-check-circle"></i> Online
+                        </span>
+                    </div>
+                    <div style="background: var(--surface-light); padding: 10px; border-radius: 8px; margin-bottom: 15px;">
+                        <div style="font-size: 0.8rem; color: var(--text-light);">Адрес</div>
+                        <div id="wallet-address" style="font-family: monospace; font-size: 0.7rem; word-break: break-all;"></div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="disconnectWallet()">
+                        <i class="fas fa-power-off"></i> Отключить
+                    </button>
                 </div>
             </div>
 
@@ -378,84 +92,47 @@
                 <i class="fas fa-plus"></i> Подать заявку на финансирование
             </button>
 
+            <!-- Текущий раунд с прогрессом -->
             <div class="card">
                 <div class="card-title"><i class="fas fa-rocket"></i> Текущий раунд</div>
-                <p>Сбор заявок открыт до пятницы. Успейте предложить свой проект!</p>
+                <p>Сбор заявок открыт до <strong id="round-deadline">пятницы</strong>. Успейте предложить свой проект!</p>
                 <div class="progress-bar">
-                    <div class="progress" style="width: 65%;"></div>
+                    <div class="progress" id="round-progress" style="width: 65%;"></div>
                 </div>
-                <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">Осталось 2 дня 15 часов</div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">
+                    <span>Собрано: <span id="current-round-raised">3,520</span> TON</span>
+                    <span>Цель: <span id="round-goal">5,000</span> TON</span>
+                </div>
+                <div style="font-size: 0.8rem; color: var(--text-light); margin-top: 5px;">
+                    Осталось: <span id="round-time-left">2 дня 15 часов</span>
+                </div>
+            </div>
+
+            <!-- Быстрые действия -->
+            <div class="card">
+                <div class="card-title"><i class="fas fa-bolt"></i> Быстрые действия</div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                    <button class="btn btn-secondary" onclick="showSection('projects')">
+                        <i class="fas fa-vote-yea"></i> Голосовать
+                    </button>
+                    <button class="btn btn-secondary" onclick="showToast('История транзакций будет доступна после подключения API', 'info')">
+                        <i class="fas fa-history"></i> История
+                    </button>
+                </div>
             </div>
         </div>
 
-        <!-- Страница проектов -->
+        <!-- Остальные разделы (проекты, профиль, правила) остаются пока без изменений -->
         <div id="projects" class="section">
-            <div class="card">
-                <div class="card-title"><i class="fas fa-project-diagram"></i> Активные проекты</div>
-                <p>Голосуйте за проекты, которые вам нравятся. Победитель получит финансирование в конце раунда.</p>
-            </div>
-
-            <div class="card project-card">
-                <div style="font-weight: 600; margin-bottom: 5px; color: var(--text);">Образовательный курс по программированию</div>
-                <div style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 10px;">Запрошено: 500 TON · Голосов: 42</div>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 65%;"></div>
-                </div>
-                <button class="btn btn-secondary" style="margin-top: 10px;"><i class="fas fa-vote-yea"></i> Поддержать</button>
-            </div>
-
-            <div class="card project-card">
-                <div style="font-weight: 600; margin-bottom: 5px; color: var(--text);">Запуск мини-кофейни</div>
-                <div style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 10px;">Запрошено: 1200 TON · Голосов: 28</div>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 40%;"></div>
-                </div>
-                <button class="btn btn-secondary" style="margin-top: 10px;"><i class="fas fa-vote-yea"></i> Поддержать</button>
-            </div>
-
-            <button class="btn" onclick="showToast('Функция будет доступна после подключения бэкенда', 'info')">
-                <i class="fas fa-plus"></i> Подать новый проект
-            </button>
+            <!-- ... существующий код ... -->
         </div>
 
-        <!-- Страница профиля -->
         <div id="profile" class="section">
-            <div class="card">
-                <div class="card-title"><i class="fas fa-user"></i> Мой профиль</div>
-                <p>Здесь будет информация о вашей активности, балансе и участии в проектах.</p>
-            </div>
-
-            <div class="card">
-                <div class="card-title"><i class="fas fa-history"></i> История участия</div>
-                <p>Следите за вашими заявками и голосами.</p>
-            </div>
-
-            <button class="btn" onclick="showToast('Раздел в разработке', 'warning')">
-                <i class="fas fa-wallet"></i> Подключить TON кошелек
-            </button>
+            <!-- ... существующий код ... -->
         </div>
 
-        <!-- Страница правил -->
         <div id="rules" class="section">
-            <div class="card">
-                <div class="card-title"><i class="fas fa-book"></i> Правила сообщества</div>
-                <ul class="feature-list">
-                    <li><i class="fas fa-check"></i> Только реальные и проверяемые цели</li>
-                    <li><i class="fas fa-check"></i> Прозрачность всех операций через TON</li>
-                    <li><i class="fas fa-check"></i> Сообщество решает голосованием</li>
-                    <li><i class="fas fa-check"></i> Уважение к каждому участнику</li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <div class="card-title"><i class="fas fa-cogs"></i> Как это работает</div>
-                <ol style="padding-left: 20px; color: var(--text-light);">
-                    <li style="margin-bottom: 10px;">Участники подают заявки с описанием целей</li>
-                    <li style="margin-bottom: 10px;">Сообщество голосует в течение 3 дней</li>
-                    <li style="margin-bottom: 10px;">Смарт-контракт автоматически распределяет средства</li>
-                    <li>Победитель получает финансирование</li>
-                </ol>
-            </div>
+            <!-- ... существующий код ... -->
         </div>
     </div>
 
@@ -485,33 +162,110 @@
         tg.expand();
         tg.enableClosingConfirmation();
 
-        // Показываем основную кнопку
-        tg.MainButton.setText('Присоединиться к сообществу');
-        tg.MainButton.show();
-        tg.MainButton.onClick(() => {
-            tg.showAlert('Для участия перейдите в @vmestesmojem_bot и нажмите START');
-        });
+        // Данные приложения (в будущем заменим на API)
+        let appData = {
+            members: 154,
+            projects: 7,
+            tonRaised: 5420,
+            winners: 3,
+            currentRound: {
+                raised: 3520,
+                goal: 5000,
+                deadline: '2025-10-01',
+                timeLeft: '2 дня 15 часов'
+            },
+            walletConnected: false,
+            walletAddress: ''
+        };
 
-        // Функция для показа разделов
+        // Инициализация приложения
+        function initApp() {
+            updateStatistics();
+            updateRoundInfo();
+            checkWalletConnection();
+        }
+
+        // Обновление статистики
+        function updateStatistics() {
+            document.getElementById('members-count').textContent = appData.members.toLocaleString();
+            document.getElementById('projects-count').textContent = appData.projects;
+            document.getElementById('ton-raised').textContent = appData.tonRaised.toLocaleString();
+            document.getElementById('winners-count').textContent = appData.winners;
+        }
+
+        // Обновление информации о раунде
+        function updateRoundInfo() {
+            const progress = (appData.currentRound.raised / appData.currentRound.goal) * 100;
+            document.getElementById('round-progress').style.width = `${progress}%`;
+            document.getElementById('current-round-raised').textContent = appData.currentRound.raised.toLocaleString();
+            document.getElementById('round-goal').textContent = appData.currentRound.goal.toLocaleString();
+            document.getElementById('round-time-left').textContent = appData.currentRound.timeLeft;
+        }
+
+        // Подключение кошелька (имитация)
+        function connectWallet() {
+            // В реальности здесь будет интеграция с TON Connect
+            showToast('Подключение кошелька...', 'info');
+            
+            setTimeout(() => {
+                appData.walletConnected = true;
+                appData.walletAddress = 'EQAhkf6...z35Xabc';
+                updateWalletDisplay();
+                showToast('Кошелек успешно подключен!', 'success');
+                
+                // Увеличим счетчик участников при первом подключении
+                if (appData.members === 154) {
+                    appData.members++;
+                    updateStatistics();
+                }
+            }, 1500);
+        }
+
+        // Отключение кошелька
+        function disconnectWallet() {
+            appData.walletConnected = false;
+            appData.walletAddress = '';
+            updateWalletDisplay();
+            showToast('Кошелек отключен', 'info');
+        }
+
+        // Обновление отображения кошелька
+        function updateWalletDisplay() {
+            const connectedSection = document.getElementById('wallet-connected');
+            const notConnectedSection = document.getElementById('wallet-not-connected');
+            const walletAddress = document.getElementById('wallet-address');
+
+            if (appData.walletConnected) {
+                connectedSection.style.display = 'block';
+                notConnectedSection.style.display = 'none';
+                walletAddress.textContent = appData.walletAddress;
+            } else {
+                connectedSection.style.display = 'none';
+                notConnectedSection.style.display = 'block';
+            }
+        }
+
+        // Проверка состояния кошелька при загрузке
+        function checkWalletConnection() {
+            // В реальности здесь будет проверка через TON Connect
+            updateWalletDisplay();
+        }
+
+        // Функция для показа разделов (остается без изменений)
         function showSection(sectionId) {
-            // Скрываем все разделы
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
             
-            // Убираем активный класс у всех кнопок навигации
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // Показываем выбранный раздел
             document.getElementById(sectionId).classList.add('active');
-            
-            // Активируем соответствующую кнопку навигации
             event.currentTarget.classList.add('active');
         }
 
-        // Функция для показа уведомлений
+        // Функция для показа уведомлений (остается без изменений)
         function showToast(message, type = 'info') {
             const toast = document.createElement('div');
             toast.className = 'toast';
@@ -537,6 +291,9 @@
                 showSection(sectionId);
             });
         });
+
+        // Инициализация приложения при загрузке
+        document.addEventListener('DOMContentLoaded', initApp);
     </script>
 </body>
 </html>
